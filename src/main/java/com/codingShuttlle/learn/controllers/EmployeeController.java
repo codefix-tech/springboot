@@ -2,7 +2,7 @@ package com.codingShuttlle.learn.controllers;
 
 import com.codingShuttlle.learn.dto.EmployeeDTO;
 import com.codingShuttlle.learn.entities.EmployeeEntity;
-import com.codingShuttlle.learn.reprositories.EmployeeRepository;
+import com.codingShuttlle.learn.services.EmployeeService;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -17,30 +17,30 @@ public class EmployeeController {
 //        return "My Name is Nishant Kumar";
 //    }
 
-    private final EmployeeRepository employeeRepository;
+    private final EmployeeService employeeService;
 
-    public EmployeeController(EmployeeRepository employeeRepository) {
-        this.employeeRepository = employeeRepository;
+    public EmployeeController(EmployeeService employeeService) {
+        this.employeeService = employeeService;
     }
 
     @GetMapping(path = "/{employeeId}")
-    public EmployeeEntity employeeById(@PathVariable(name = "employeeId") Long Id){
+    public EmployeeDTO employeeById(@PathVariable(name = "employeeId") Long Id){
 
-        return employeeRepository.findById(Id).orElse(null);
+        return employeeService.getEmployeeById(Id);
 
     }
 
    @GetMapping
-    public List<EmployeeEntity> getAllEmployees(@RequestParam(required = false) Integer age,
+    public List<EmployeeDTO> getAllEmployees(@RequestParam(required = false) Integer age,
                                 @RequestParam(required = false) String sortBy){
 
-        return employeeRepository.findAll();
+        return employeeService.getAlLEmployees();
 
     }
 
     @PostMapping
-    public EmployeeEntity createEmployee(@RequestBody EmployeeEntity inputEmployee){
-       return employeeRepository.save(inputEmployee);
+    public EmployeeDTO createEmployee(@RequestBody EmployeeDTO  inputEmployee){
+       return employeeService.createNewEmployee(inputEmployee);
 
     }
 
