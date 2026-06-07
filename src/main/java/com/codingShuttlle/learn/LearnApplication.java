@@ -10,6 +10,6 @@ public class LearnApplication {
 		SpringApplication.run(LearnApplication.class, args);
 	}
 
-    
+
 
 }
