@@ -6,8 +6,11 @@ import com.codingShuttlle.learn.entities.EmployeeEntity;
 import com.codingShuttlle.learn.reprositories.EmployeeRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ReflectionUtils;
 
+import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -55,10 +58,26 @@ public class EmployeeService {
         return modelMapper.map(savedEmployeeEntity,EmployeeDTO.class);
     }
 
+      public boolean isExitsEmployeeById (Long employeeId){
+             return employeeRepository.existsById(employeeId);
+      }
+
     public boolean deleteEmployeeById(Long employeeId) {
-        boolean exists = employeeRepository.existsById(employeeId);
+        boolean exists = isExitsEmployeeById(employeeId);
         if(!exists) return false;
        employeeRepository.deleteById(employeeId);
        return true;
+    }
+
+    public EmployeeDTO updatePartialEmployeeById(Long employeeId, Map<String, Object> updates) {
+        boolean exists = isExitsEmployeeById( employeeId);
+        if(!exists) return null ;
+        EmployeeEntity employeeEntity = employeeRepository.findById(employeeId).get();
+         updates.forEach((field,value) -> {
+             Field fieldTOBeUpdated = org.springframework.data.util.ReflectionUtils.getRequiredField(EmployeeEntity.class,field);
+             fieldTOBeUpdated.setAccessible(true);
+             ReflectionUtils.setField(fieldTOBeUpdated,employeeEntity,value);
+        });
+             return modelMapper.map(employeeRepository.save(employeeEntity),EmployeeDTO.class);
     }
 }
