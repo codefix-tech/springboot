@@ -1,9 +1,7 @@
 package com.codingShuttlle.learn.dto;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
 
 import java.time.LocalDate;
 
@@ -11,6 +9,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Getter
 @Setter
+@AllArgsConstructor
 public class EmployeeDTO {
 
         private Long id;
@@ -18,17 +17,8 @@ public class EmployeeDTO {
         private String email;
         private Integer age;
         private LocalDate dateOfJoining;
+        @JsonProperty("isActive")
         private Boolean isActive;
-
-    public EmployeeDTO(Long id, String name, String email, Integer age, LocalDate dateOfJoining, Boolean isActive) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.age = age;
-        this.dateOfJoining = dateOfJoining;
-        this.isActive = isActive;
-    }
-
 
 
 
